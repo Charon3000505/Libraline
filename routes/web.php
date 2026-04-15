@@ -4,51 +4,90 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\User\Dashboard as UserDashboard;
+use App\Livewire\User\Library as UserLibrary;
 use App\Livewire\Books\Index as BooksIndex;
 use App\Livewire\Loans\Index as LoansIndex;
 use App\Livewire\Returns\Index as ReturnsIndex;
 
-// Route halaman utama - redirect langsung ke login
+
+// ==========================
+// LANDING PAGE
+// ==========================
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('welcome');
 })->name('home');
 
-// Dashboard - menggunakan Livewire component berdasarkan role
+
+// ==========================
+// DASHBOARD (ROLE BASED)
+// ==========================
 Route::get('/dashboard', function () {
-    $role = auth()->user()->role ?? 'user';
-    
-    if ($role === 'admin') {
+
+    $user = auth()->user();
+
+    if (!$user) {
+        return redirect()->route('login');
+    }
+
+    // ADMIN → tetap ke dashboard admin
+    if ($user->role === 'admin') {
         return app(AdminDashboard::class)();
     }
-    
-    return app(UserDashboard::class)();
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route untuk halaman lainnya
-Route::middleware('auth')->group(function () {
-    // Profile (dari Breeze)
+    // USER → langsung ke library 🔥
+    return redirect()->route('library');
+})->middleware(['auth'])->name('dashboard');
+
+
+// ==========================
+// LIBRARY (USER PAGE UTAMA)
+// ==========================
+Route::get('/library', UserLibrary::class)
+    ->middleware(['auth'])
+    ->name('library');
+
+
+// ==========================
+// ROUTE SETELAH LOGIN
+// ==========================
+Route::middleware(['auth'])->group(function () {
+
+    // ================= PROFILE =================
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
-    // Data Buku - Livewire Component
+
+
+    // ================= BOOKS =================
     Route::get('/books', BooksIndex::class)->name('books');
-    
-    // Peminjaman - Livewire Component
+
+
+    // ================= LOANS =================
     Route::get('/loans', LoansIndex::class)->name('loans');
-    
-    // Pengembalian - Livewire Component
+
+
+    // ================= RETURNS =================
     Route::get('/returns', ReturnsIndex::class)->name('returns');
-    
-    // Kelola User (khusus admin)
+
+
+    // ================= USERS (ADMIN ONLY) =================
     Route::get('/users', function () {
-        if (auth()->user()->role !== 'admin') {
+
+        $user = auth()->user();
+
+        if (!$user || $user->role !== 'admin') {
             abort(403, 'Akses ditolak.');
         }
-        return view('livewire.placeholder', ['title' => 'Kelola User', 'message' => 'Halaman Kelola User akan dibuat.']);
+
+        return view('livewire.placeholder', [
+            'title' => 'Kelola User',
+            'message' => 'Halaman Kelola User akan dibuat.'
+        ]);
     })->name('users');
 });
 
-require __DIR__.'/auth.php';
 
-
+// ==========================
+// AUTH ROUTES (WAJIB)
+// ==========================
+require __DIR__ . '/auth.php';
