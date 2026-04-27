@@ -1,334 +1,246 @@
-{{--
-=============================================================================
-HALAMAN DATA BUKU - PERPUSTAKAAN
-=============================================================================
-File: resources/views/livewire/books/index.blade.php
-Deskripsi: Halaman manajemen data buku dengan desain modern dan profesional
+<div class="p-6 bg-[#F5F0E8] min-h-screen bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M30 5 L55 30 L30 55 L5 30 Z" fill="none" stroke="%23D4AF37" stroke-width="0.5" opacity="0.03"/%3E%3C/svg%3E')]">
 
-STRUKTUR:
-1. Header Section (Judul + Tombol Aksi)
-2. Statistics Cards (4 kolom grid)
-3. Search & Filter Bar
-4. Data Table (siap untuk Livewire/DataTables)
-
-TIPS PENGEMBANGAN:
-- Untuk Livewire: Tambahkan wire:model pada input dan wire:click pada tombol
-- Untuk yajra DataTables: Ganti section tabel dengan {{ $dataTable->table() }}
-- Untuk pagination: Tambahkan {{ $books->links() }} di bawah tabel
-=============================================================================
---}}
-
-<div class="p-6">
-    {{-- ================================================================
-         SECTION 1: HEADER
-         - Judul halaman di kiri
-         - Tombol aksi di kanan
-         - Responsive: stack di mobile, inline di desktop
-    ================================================================ --}}
-    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        {{-- Judul dan Subtext --}}
-        <div>
-            <h1 class="text-xl font-bold text-gray-900">Data Buku</h1>
-            <p class="mt-1 text-sm text-gray-500">Kelola koleksi buku perpustakaan Anda</p>
+    {{-- HEADER --}}
+    <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="relative">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-[#D4AF37] to-[#B4941E] rounded-lg flex items-center justify-center shadow-lg shadow-[#D4AF37]/20">
+                    <svg class="w-6 h-6 text-[#2D1B4E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-serif font-bold text-[#2D1B4E] tracking-wide">Sacred Manuscripts</h1>
+                    <p class="text-sm text-[#5C4B3A] font-serif italic">~ Koleksi Kitab Perpustakaan ~</p>
+                </div>
+            </div>
+            <div class="absolute -bottom-2 left-0 w-20 h-0.5 bg-gradient-to-r from-[#D4AF37] to-transparent"></div>
         </div>
 
-        {{-- Tombol Tambah Buku --}}
-        <button 
-            wire:click="openModal" 
-            type="button"
-            class="inline-flex items-center justify-center gap-2 px-5 py-2.5 
-                   bg-purple-600 hover:bg-purple-700 
-                   text-white text-sm font-semibold 
-                   rounded-xl shadow-sm 
-                   transition-all duration-200 
-                   focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
-            {{-- Icon Plus --}}
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-            </svg>
-            <span>Tambah Buku</span>
+        <button wire:click="openModal"
+            class="group relative bg-gradient-to-r from-[#2D1B4E] to-[#4A3568] text-[#D4AF37] px-6 py-3 rounded-lg border-2 border-[#D4AF37]/40 hover:border-[#D4AF37] transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/30 transform hover:-translate-y-1 font-serif font-bold">
+            <span class="flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Add New Manuscript</span>
+            </span>
         </button>
     </div>
 
-    {{-- ================================================================
-         SECTION 2: FLASH MESSAGE
-         - Notifikasi sukses/error
-    ================================================================ --}}
-    @if (session()->has('message'))
-        <div class="mb-6 flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
-            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-            </svg>
-            <span class="text-sm font-medium text-green-700">{{ session('message') }}</span>
+    {{-- FLASH MESSAGE --}}
+    @if(session()->has('message'))
+        <div class="mb-6 bg-gradient-to-r from-[#D4AF37]/10 to-[#D4AF37]/5 border-l-4 border-[#D4AF37] p-4 rounded-r-lg shadow-md animate-fadeIn">
+            <div class="flex items-center space-x-3">
+                <div class="flex-shrink-0">
+                    <svg class="w-6 h-6 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <p class="text-[#2D1B4E] font-serif italic">{{ session('message') }}</p>
+            </div>
         </div>
     @endif
 
-    {{-- ================================================================
-         SECTION 3: STATISTICS CARDS
-         - Grid 4 kolom (responsive: 2 kolom di mobile)
-         - Setiap card: Icon + Angka + Label
-         - Warna sesuai konteks (biru/hijau/merah/ungu)
-    ================================================================ --}}
-    <div class="mb-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {{-- Card: Total Buku --}}
-        <div class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-4">
-                <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-extrabold text-gray-900">{{ $books->total() }}</p>
-                    <p class="text-sm text-gray-500">Total Buku</p>
-                </div>
+    {{-- SEARCH & FILTER --}}
+    <div class="mb-6 flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
             </div>
+            <input type="text" wire:model.live="search"
+                class="w-full pl-10 pr-4 py-3 bg-white border-2 border-[#D4AF37]/20 rounded-lg font-serif text-[#2D1B4E] placeholder-[#C4A882] focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30 transition-all"
+                placeholder="Search manuscripts by title or author...">
         </div>
 
-        {{-- Card: Tersedia --}}
-        <div class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-4">
-                <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-extrabold text-green-600">{{ $books->where('stok', '>', 0)->count() }}</p>
-                    <p class="text-sm text-gray-500">Tersedia</p>
-                </div>
-            </div>
-        </div>
-
-        {{-- Card: Habis --}}
-        <div class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-4">
-                <div class="flex-shrink-0 w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-extrabold text-red-600">{{ $books->where('stok', 0)->count() }}</p>
-                    <p class="text-sm text-gray-500">Habis</p>
-                </div>
-            </div>
-        </div>
-
-        {{-- Card: Kategori --}}
-        <div class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-4">
-                <div class="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-extrabold text-purple-600">{{ $kategoris->count() }}</p>
-                    <p class="text-sm text-gray-500">Kategori</p>
-                </div>
-            </div>
-        </div>
+        <select wire:model.live="kategori"
+            class="px-4 py-3 bg-white border-2 border-[#D4AF37]/20 rounded-lg font-serif text-[#2D1B4E] focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30 transition-all cursor-pointer">
+            <option value="">📚 All Categories</option>
+            @foreach($kategoris as $k)
+                <option value="{{ $k }}">📖 {{ $k }}</option>
+            @endforeach
+        </select>
     </div>
 
-    {{-- ================================================================
-         SECTION 4: SEARCH & FILTER BAR
-         - Search input di kiri (dengan icon)
-         - Filter dropdown di kanan
-         - Responsive: stack di mobile
-    ================================================================ --}}
-    <div class="mb-6 bg-white rounded-xl border border-gray-200 p-4">
-        <div class="flex flex-col md:flex-row gap-4">
-            {{-- Search Input --}}
-            <div class="flex-1 relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
-                    </svg>
-                </div>
-                <input 
-                    type="text" 
-                    wire:model.live.debounce.300ms="search"
-                    placeholder="Cari judul buku atau penulis..."
-                    class="w-full pl-12 pr-4 py-2.5 
-                           border border-gray-300 rounded-lg 
-                           text-sm placeholder-gray-400
-                           focus:ring-2 focus:ring-purple-500 focus:border-purple-500
-                           transition-colors">
-            </div>
+    {{-- TABLE - KATALOG PERPUSTAKAAN --}}
+    <div class="bg-gradient-to-br from-[#FAF8F5] to-[#F0EAE0] border-2 border-[#D4AF37]/30 rounded-lg overflow-hidden shadow-xl">
 
-            {{-- Filter Kategori --}}
-            <div class="w-full md:w-56">
-                <select 
-                    wire:model.live="kategori"
-                    class="w-full px-4 py-2.5 
-                           border border-gray-300 rounded-lg 
-                           text-sm text-gray-700
-                           focus:ring-2 focus:ring-purple-500 focus:border-purple-500
-                           transition-colors">
-                    <option value="">Semua Kategori</option>
-                    @foreach($kategoris as $kat)
-                        <option value="{{ $kat }}">{{ $kat }}</option>
-                    @endforeach
-                </select>
+        {{-- Table Header --}}
+        <div class="bg-gradient-to-r from-[#2D1B4E] via-[#3D2B5E] to-[#4A3568] px-6 py-4 border-b-2 border-[#D4AF37]">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <span class="text-[#D4AF37] text-lg">📜</span>
+                    <h3 class="text-lg font-serif font-bold text-[#D4AF37]">Library Catalog</h3>
+                </div>
+                <div class="text-[#C4A882] text-sm font-serif italic">{{ $books->total() }} manuscripts in collection</div>
             </div>
         </div>
-    </div>
 
-    {{-- ================================================================
-         SECTION 5: DATA TABLE
-         - Header dengan background abu
-         - Row dengan hover effect
-         - Badge untuk status dan kategori
-         - Tombol aksi di kolom terakhir
-         
-         TIPS:
-         - Untuk DataTables: Ganti dengan {!! $dataTable->table() !!}
-         - Untuk Livewire Pagination: Sudah siap dengan $books->links()
-    ================================================================ --}}
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        {{-- Mobile View: Card Layout --}}
-        <div class="sm:hidden divide-y divide-gray-100">
-            @forelse($books as $book)
-                <div class="p-4 hover:bg-gray-50 transition-colors">
-                    <div class="flex items-start justify-between gap-3">
-                        <div class="flex-1 min-w-0">
-                            {{-- Badges --}}
-                            <div class="flex flex-wrap items-center gap-2 mb-2">
-                                @if($book->kategori)
-                                    <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
-                                        {{ $book->kategori }}
-                                    </span>
-                                @endif
-                                <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold 
-                                    {{ $book->stok > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                    Stok: {{ $book->stok }}
-                                </span>
-                            </div>
-                            {{-- Title & Author --}}
-                            <h3 class="text-sm font-semibold text-gray-900 truncate">{{ $book->judul }}</h3>
-                            <p class="text-sm text-gray-500">{{ $book->penulis }}</p>
-                            @if($book->penerbit)
-                                <p class="text-xs text-gray-400 mt-1">{{ $book->penerbit }}</p>
-                            @endif
-                        </div>
-                        {{-- Action Buttons --}}
-                        <div class="flex flex-col gap-1">
-                            <button wire:click="editBook({{ $book->id }})" type="button" 
-                                class="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/>
-                                </svg>
-                            </button>
-                            <button wire:click="confirmDelete({{ $book->id }})" type="button" 
-                                class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <div class="p-12 text-center">
-                    <svg class="w-16 h-16 text-gray-200 mx-auto mb-4" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
-                    </svg>
-                    <h3 class="text-sm font-medium text-gray-900">Belum ada data buku</h3>
-                    <p class="text-sm text-gray-500 mt-1">Mulai dengan menambahkan buku pertama</p>
-                </div>
-            @endforelse
-        </div>
-
-        {{-- Desktop View: Table --}}
-        <div class="hidden sm:block">
+        <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
-                    <tr class="bg-gray-50 border-b border-gray-200">
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Buku</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Penerbit</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kategori</th>
-                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Stok</th>
-                        <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
+                    <tr class="bg-[#E8E0D0]/50 border-b-2 border-[#D4AF37]/10">
+                        <th class="p-4 text-left w-[40%]">
+                            <span class="text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider">📖 Manuscript</span>
+                        </th>
+                        <th class="p-4 text-left">
+                            <span class="text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider">✍️ Author</span>
+                        </th>
+                        <th class="p-4 text-left">
+                            <span class="text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider">🏷️ Category</span>
+                        </th>
+                        <th class="p-4 text-center">
+                            <span class="text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider">📦 Stock</span>
+                        </th>
+                        <th class="p-4 text-right">
+                            <span class="text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider">⚜️ Actions</span>
+                        </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+
+                <tbody class="divide-y divide-[#D4AF37]/10">
                     @forelse($books as $book)
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            {{-- Kolom: Buku (Judul + Penulis) --}}
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-4">
-                                    {{-- Avatar dengan Inisial --}}
-                                    <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
-                                        <span class="text-white font-bold text-sm">{{ strtoupper(substr($book->judul, 0, 1)) }}</span>
+                        <tr class="hover:bg-[#D4AF37]/5 transition-all duration-300 group">
+                            {{-- BOOK COVER + INFO --}}
+                            <td class="p-4">
+                                <div class="flex items-center space-x-4">
+                                    {{-- BOOK COVER THUMBNAIL --}}
+                                    <div class="flex-shrink-0 relative">
+                                        <div class="w-[60px] h-[85px] rounded-sm overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-0.5
+                                            @if(!empty($book->image) && Storage::disk('public')->exists($book->image))
+                                                border-2 border-[#D4AF37]/40 group-hover:border-[#D4AF37]
+                                            @else
+                                                border-2 border-dashed border-[#D4AF37]/20
+                                            @endif">
+
+                                            @if(!empty($book->image) && Storage::disk('public')->exists($book->image))
+                                                {{-- REAL BOOK COVER --}}
+                                                <img src="{{ asset('storage/' . $book->image) }}"
+                                                     alt="Cover of {{ $book->judul }}"
+                                                     class="w-full h-full object-cover"
+                                                     loading="lazy"
+                                                     onerror="this.src='https://via.placeholder.com/100x150/D4AF37/2D1B4E?text=No+Cover'; this.classList.add('opacity-50');">
+
+                                                {{-- Overlay effect on hover --}}
+                                                <div class="absolute inset-0 bg-gradient-to-t from-[#2D1B4E]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-1">
+                                                    <span class="text-[#D4AF37] text-[8px] font-serif font-bold">View Cover</span>
+                                                </div>
+                                            @else
+                                                {{-- DEFAULT COVER / NO COVER --}}
+                                                <div class="w-full h-full bg-gradient-to-br from-[#D4AF37]/10 via-[#D4AF37]/5 to-[#2D1B4E]/10 flex flex-col items-center justify-center p-1">
+                                                    <svg class="w-5 h-5 text-[#D4AF37]/50 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                                    </svg>
+                                                    <span class="text-[8px] text-[#C4A882] text-center font-serif leading-tight">No Cover</span>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        {{-- Spine effect --}}
+                                        <div class="absolute left-0 top-1 bottom-1 w-[2px] bg-gradient-to-r from-[#D4AF37]/30 to-transparent"></div>
                                     </div>
-                                    <div class="min-w-0">
-                                        <p class="text-sm font-semibold text-gray-900 truncate">{{ $book->judul }}</p>
-                                        <p class="text-sm text-gray-500 truncate">{{ $book->penulis }}</p>
+
+                                    {{-- BOOK DETAILS --}}
+                                    <div class="min-w-0 flex-1">
+                                        <h4 class="font-serif font-bold text-[#2D1B4E] group-hover:text-[#B4941E] transition-colors text-sm leading-tight">
+                                            {{ $book->judul }}
+                                        </h4>
+
+                                        {{-- Cover status badge --}}
+                                        <div class="mt-1">
+                                            @if(!empty($book->image) && Storage::disk('public')->exists($book->image))
+                                                <span class="inline-flex items-center space-x-1 text-[10px] text-[#5C4B3A] font-serif italic">
+                                                    <svg class="w-3 h-3 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>Has cover</span>
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center space-x-1 text-[10px] text-[#C4A882] font-serif italic">
+                                                    <svg class="w-3 h-3 text-[#C4A882]" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>No cover</span>
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </td>
 
-                            {{-- Kolom: Penerbit --}}
-                            <td class="px-6 py-4">
-                                <p class="text-sm text-gray-600">{{ $book->penerbit ?? '-' }}</p>
-                                @if($book->tahun_terbit)
-                                    <p class="text-xs text-gray-400">{{ $book->tahun_terbit }}</p>
-                                @endif
+                            <td class="p-4">
+                                <div class="font-serif text-[#2D1B4E] text-sm">{{ $book->penulis }}</div>
                             </td>
 
-                            {{-- Kolom: Kategori --}}
-                            <td class="px-6 py-4">
-                                @if($book->kategori)
-                                    <span class="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
-                                        {{ $book->kategori }}
-                                    </span>
-                                @else
-                                    <span class="text-gray-400 text-sm">-</span>
-                                @endif
+                            <td class="p-4">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-serif font-medium bg-[#D4AF37]/10 text-[#2D1B4E] border border-[#D4AF37]/30">
+                                    {{ $book->kategori ?? 'Uncategorized' }}
+                                </span>
                             </td>
 
-                            {{-- Kolom: Stok --}}
-                            <td class="px-6 py-4 text-center">
-                                <span class="inline-flex px-3 py-1 rounded-full text-xs font-bold
-                                    {{ $book->stok > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                            <td class="p-4 text-center">
+                                <span class="inline-flex items-center justify-center min-w-[2rem] h-8 rounded-full font-serif font-bold text-sm
+                                    {{ $book->stok > 5 ? 'bg-green-100 text-green-800' : ($book->stok > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
                                     {{ $book->stok }}
                                 </span>
                             </td>
 
-                            {{-- Kolom: Aksi --}}
-                            <td class="px-6 py-4">
-                                <div class="flex items-center justify-end gap-2">
-                                    <button wire:click="editBook({{ $book->id }})" type="button" 
-                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium 
-                                               text-purple-700 bg-purple-50 hover:bg-purple-100 
-                                               rounded-lg transition-colors">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/>
-                                        </svg>
-                                        Edit
-                                    </button>
-                                    <button wire:click="confirmDelete({{ $book->id }})" type="button" 
-                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium 
-                                               text-red-700 bg-red-50 hover:bg-red-100 
-                                               rounded-lg transition-colors">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
-                                        </svg>
-                                        Hapus
-                                    </button>
+                            <td class="p-4 text-right">
+                                <div class="flex items-center justify-end space-x-2">
+                                    @if(auth()->user()->role === 'admin')
+                                        <button wire:click="editBook({{ $book->id }})"
+                                            class="group/btn relative px-3 py-1.5 text-xs font-serif font-medium text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-md hover:bg-[#D4AF37] hover:text-[#2D1B4E] transition-all duration-300">
+                                            <span class="flex items-center space-x-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                                <span>Edit</span>
+                                            </span>
+                                        </button>
+
+                                        <button wire:click="confirmDelete({{ $book->id }})"
+                                            class="group/btn relative px-3 py-1.5 text-xs font-serif font-medium text-red-600 bg-red-50 border border-red-200 rounded-md hover:bg-red-600 hover:text-white transition-all duration-300">
+                                            <span class="flex items-center space-x-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                                <span>Delete</span>
+                                            </span>
+                                        </button>
+                                    @else
+                                        <button wire:click="pinjamBuku({{ $book->id }})"
+                                            class="group/btn relative px-4 py-2 text-xs font-serif font-bold text-[#2D1B4E] bg-gradient-to-r from-[#D4AF37] to-[#B4941E] rounded-md hover:shadow-lg hover:shadow-[#D4AF37]/30 transform hover:-translate-y-0.5 transition-all duration-300">
+                                            <span class="flex items-center space-x-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                </svg>
+                                                <span>Borrow</span>
+                                            </span>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center">
-                                <svg class="w-16 h-16 text-gray-200 mx-auto mb-4" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
-                                </svg>
-                                <h3 class="text-sm font-medium text-gray-900">Belum ada data buku</h3>
-                                <p class="text-sm text-gray-500 mt-1">Mulai dengan menambahkan buku pertama</p>
+                            <td colspan="5" class="text-center p-12">
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="relative">
+                                        <div class="text-8xl opacity-20">📚</div>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-[#F5F0E8] via-transparent to-transparent"></div>
+                                    </div>
+                                    <h3 class="text-2xl font-serif font-bold text-[#2D1B4E]">No Manuscripts Found</h3>
+                                    <p class="text-[#5C4B3A] font-serif italic max-w-md text-center">
+                                        "The library shelves await new wisdom. Add your first manuscript to begin this collection."
+                                    </p>
+                                    <div class="flex items-center space-x-2 text-[#D4AF37]">
+                                        <span>✦</span>
+                                        <span class="text-xl">⚜️</span>
+                                        <span>✦</span>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
@@ -336,220 +248,260 @@ TIPS PENGEMBANGAN:
             </table>
         </div>
 
-        {{-- Pagination Footer --}}
-        @if($books->hasPages())
-            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                {{ $books->links() }}
+        {{-- Pagination --}}
+        <div class="px-6 py-4 border-t-2 border-[#D4AF37]/10 bg-[#E8E0D0]/30">
+            <div class="flex items-center justify-between">
+                <div class="text-sm font-serif text-[#5C4B3A] italic">
+                    Showing {{ $books->firstItem() ?? 0 }} - {{ $books->lastItem() ?? 0 }} of {{ $books->total() }} manuscripts
+                </div>
+                <div>
+                    {{ $books->links() }}
+                </div>
             </div>
-        @endif
+        </div>
     </div>
 
-    {{-- ================================================================
-         SECTION 6: MODAL FORM (TAMBAH/EDIT)
-         - Overlay dengan backdrop blur
-         - Form dengan spacing konsisten
-         - Tombol aksi di footer
-    ================================================================ --}}
+    {{-- MODAL FORM - BOOK COVER UPLOAD EXPERIENCE --}}
     @if($showModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            {{-- Backdrop --}}
-            <div class="flex min-h-screen items-center justify-center p-4">
-                <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" wire:click="closeModal"></div>
-                
-                {{-- Modal Content --}}
-                <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl">
-                    <form wire:submit="save">
-                        {{-- Header --}}
-                        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-900">
-                                {{ $isEdit ? 'Edit Buku' : 'Tambah Buku Baru' }}
-                            </h3>
-                            <button type="button" wire:click="closeModal" 
-                                class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
+        <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 backdrop-blur-sm p-4">
+            <div class="bg-gradient-to-br from-[#FAF8F5] to-[#F0EAE0] p-8 rounded-lg border-2 border-[#D4AF37] w-full max-w-lg shadow-2xl shadow-[#D4AF37]/20 transform transition-all max-h-[90vh] overflow-y-auto">
+
+                {{-- Modal Header --}}
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-[#D4AF37] to-[#B4941E] rounded-lg flex items-center justify-center shadow-lg">
+                            <svg class="w-6 h-6 text-[#2D1B4E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
                         </div>
-
-                        {{-- Body --}}
-                        <div class="px-6 py-5 space-y-4 max-h-[60vh] overflow-y-auto">
-                            {{-- Judul --}}
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                                    Judul Buku <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" wire:model="judul" 
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm 
-                                           focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                    placeholder="Masukkan judul buku">
-                                @error('judul') <p class="mt-1.5 text-xs text-red-600">{{ $message }}</p> @enderror
-                            </div>
-
-                            {{-- Penulis --}}
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                                    Penulis <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" wire:model="penulis" 
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm 
-                                           focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                    placeholder="Nama penulis">
-                                @error('penulis') <p class="mt-1.5 text-xs text-red-600">{{ $message }}</p> @enderror
-                            </div>
-
-                            {{-- Penerbit & Tahun (2 kolom) --}}
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Penerbit</label>
-                                    <input type="text" wire:model="penerbit" 
-                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm 
-                                               focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                        placeholder="Nama penerbit">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Tahun Terbit</label>
-                                    <input type="number" wire:model="tahun_terbit" 
-                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm 
-                                               focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                        placeholder="2024">
-                                </div>
-                            </div>
-
-                            {{-- ISBN & Stok (2 kolom) --}}
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">ISBN</label>
-                                    <input type="text" wire:model="isbn" 
-                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm 
-                                               focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                        placeholder="978-xxx-xxx">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                                        Stok <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" wire:model="stok" min="0"
-                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm 
-                                               focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
-                                    @error('stok') <p class="mt-1.5 text-xs text-red-600">{{ $message }}</p> @enderror
-                                </div>
-                            </div>
-
-                            {{-- Kategori --}}
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Kategori</label>
-                                <input type="text" wire:model="kategoriInput" 
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm 
-                                           focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                    placeholder="Fiksi, Non-Fiksi, Sejarah, dll">
-                            </div>
-
-                            {{-- Deskripsi --}}
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi</label>
-                                <textarea wire:model="deskripsi" rows="3"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm 
-                                           focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
-                                    placeholder="Deskripsi singkat tentang buku"></textarea>
-                            </div>
+                        <div>
+                            <h2 class="text-xl font-serif font-bold text-[#2D1B4E]">
+                                {{ $isEdit ? 'Edit Manuscript' : 'Add New Manuscript' }}
+                            </h2>
+                            <p class="text-xs text-[#C4A882] font-serif italic">Complete the manuscript details</p>
                         </div>
-
-                        {{-- Footer --}}
-                        <div class="flex items-center justify-end gap-3 px-6 py-4 bg-gray-50 border-t border-gray-200 rounded-b-2xl">
-                            <button type="button" wire:click="closeModal"
-                                class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 
-                                       rounded-lg hover:bg-gray-50 transition-colors">
-                                Batal
-                            </button>
-                            <button type="submit"
-                                class="px-5 py-2.5 text-sm font-medium text-white bg-purple-600 
-                                       rounded-lg hover:bg-purple-700 transition-colors">
-                                {{ $isEdit ? 'Simpan Perubahan' : 'Tambah Buku' }}
-                            </button>
-                        </div>
-                    </form>
+                    </div>
+                    <button wire:click="closeModal" class="text-[#C4A882] hover:text-[#2D1B4E] transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
+
+                {{-- Form --}}
+                <form wire:submit.prevent="save" class="space-y-5">
+
+                    {{-- ========== BOOK COVER SECTION ========== --}}
+                    <div class="bg-white/50 rounded-lg p-5 border-2 border-dashed border-[#D4AF37]/20 hover:border-[#D4AF37]/40 transition-all">
+
+                        {{-- Section Header --}}
+                        <div class="flex items-center space-x-2 mb-4">
+                            <div class="w-8 h-8 bg-gradient-to-br from-[#D4AF37]/20 to-[#B4941E]/20 rounded-md flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-serif font-bold text-[#2D1B4E]">📚 Book Cover</h3>
+                                <p class="text-[10px] text-[#C4A882] font-serif italic">Upload the front cover of this manuscript</p>
+                            </div>
+                        </div>
+
+                        {{-- COVER PREVIEW AREA --}}
+                        <div class="flex justify-center mb-4">
+                            @if($image)
+                                {{-- NEW COVER PREVIEW --}}
+                                <div class="relative group/cover">
+                                    <div class="w-[120px] h-[170px] rounded-sm overflow-hidden shadow-2xl border-2 border-[#D4AF37] transform group-hover/cover:scale-105 transition-transform duration-300">
+                                        <img src="{{ $image->temporaryUrl() }}"
+                                             alt="New book cover preview"
+                                             class="w-full h-full object-cover">
+
+                                        {{-- Shine effect --}}
+                                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover/cover:opacity-100 transition-opacity"></div>
+                                    </div>
+
+                                    {{-- Book spine --}}
+                                    <div class="absolute left-0 top-2 bottom-2 w-[3px] bg-gradient-to-r from-[#D4AF37]/50 to-transparent rounded-l-sm"></div>
+
+                                    {{-- Label --}}
+                                    <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-center">
+                                        <span class="text-[10px] text-[#D4AF37] font-serif font-bold bg-[#2D1B4E] px-2 py-0.5 rounded-full border border-[#D4AF37]/30">
+                                            New Cover Preview
+                                        </span>
+                                    </div>
+                                </div>
+
+                            @elseif($isEdit && !empty($book->image) && Storage::disk('public')->exists($book->image))
+                                {{-- EXISTING COVER --}}
+                                <div class="relative group/cover">
+                                    <div class="w-[120px] h-[170px] rounded-sm overflow-hidden shadow-2xl border-2 border-[#D4AF37]/50 group-hover/cover:border-[#D4AF37] transform group-hover/cover:scale-105 transition-all duration-300">
+                                        <img src="{{ asset('storage/' . $book->image) }}"
+                                             alt="Current cover of {{ $book->judul }}"
+                                             class="w-full h-full object-cover"
+                                             onerror="this.src='https://via.placeholder.com/120x170/D4AF37/2D1B4E?text=No+Cover';">
+
+                                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover/cover:opacity-100 transition-opacity"></div>
+                                    </div>
+
+                                    <div class="absolute left-0 top-2 bottom-2 w-[3px] bg-gradient-to-r from-[#D4AF37]/30 to-transparent rounded-l-sm"></div>
+
+                                    <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-center">
+                                        <span class="text-[10px] text-[#5C4B3A] font-serif italic bg-[#E8E0D0] px-2 py-0.5 rounded-full border border-[#D4AF37]/20">
+                                            Current Cover
+                                        </span>
+                                    </div>
+                                </div>
+
+                            @else
+                                {{-- NO COVER PLACEHOLDER --}}
+                                <div class="text-center">
+                                    <div class="w-[120px] h-[170px] mx-auto rounded-sm border-2 border-dashed border-[#D4AF37]/30 bg-gradient-to-br from-[#D4AF37]/5 to-[#2D1B4E]/5 flex flex-col items-center justify-center p-3">
+                                        <svg class="w-10 h-10 text-[#D4AF37]/30 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                        </svg>
+                                        <span class="text-[10px] text-[#C4A882] font-serif italic text-center leading-tight">No cover uploaded yet</span>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- UPLOAD BUTTON --}}
+                        <div class="relative">
+                            <label class="block text-[10px] font-serif font-bold text-[#5C4B3A] uppercase tracking-wider mb-2">
+                                {{ $isEdit ? 'Change Cover' : 'Upload Cover' }}
+                            </label>
+
+                            <div class="relative group/upload">
+                                <input type="file" wire:model="image"
+                                    class="w-full px-4 py-3 bg-white border-2 border-dashed border-[#D4AF37]/30 rounded-lg font-serif text-sm text-[#5C4B3A] cursor-pointer
+                                    file:mr-4 file:py-2 file:px-5 file:rounded-md file:border file:border-[#D4AF37]/30
+                                    file:text-sm file:font-serif file:font-bold
+                                    file:bg-gradient-to-r file:from-[#D4AF37]/20 file:to-[#B4941E]/20
+                                    file:text-[#2D1B4E]
+                                    hover:file:bg-gradient-to-r hover:file:from-[#D4AF37]/30 hover:file:to-[#B4941E]/30
+                                    hover:border-[#D4AF37]/50
+                                    transition-all duration-300
+                                    focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20"
+                                    accept="image/*">
+                            </div>
+
+                            <div class="mt-2 flex items-start space-x-1">
+                                <svg class="w-3 h-3 text-[#C4A882] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <p class="text-[10px] text-[#C4A882] font-serif italic leading-tight">
+                                    Recommended: Portrait orientation, max 2MB. Formats: JPG, PNG, WebP
+                                </p>
+                            </div>
+
+                            @error('image')
+                                <div class="mt-2 flex items-center space-x-1 text-red-500">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span class="text-xs font-serif">{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </div>
+
+                        {{-- Loading indicator --}}
+                        <div wire:loading wire:target="image" class="mt-3">
+                            <div class="flex items-center space-x-2 text-[#D4AF37] bg-[#D4AF37]/5 rounded-lg p-2">
+                                <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span class="text-xs font-serif">Processing cover image...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- ========== MANUSCRIPT DETAILS ========== --}}
+                    <div class="space-y-4">
+                        {{-- Title Input --}}
+                        <div>
+                            <label class="block text-sm font-serif font-bold text-[#2D1B4E] mb-1">
+                                📖 Manuscript Title <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" wire:model="judul"
+                                class="w-full px-4 py-2.5 bg-white border-2 border-[#D4AF37]/20 rounded-lg font-serif text-[#2D1B4E] placeholder-[#C4A882] focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30 transition-all"
+                                placeholder="Enter the sacred title...">
+                            @error('judul') <span class="text-red-500 text-xs font-serif">{{ $message }}</span> @enderror
+                        </div>
+
+                        {{-- Author Input --}}
+                        <div>
+                            <label class="block text-sm font-serif font-bold text-[#2D1B4E] mb-1">
+                                ✍️ Author <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" wire:model="penulis"
+                                class="w-full px-4 py-2.5 bg-white border-2 border-[#D4AF37]/20 rounded-lg font-serif text-[#2D1B4E] placeholder-[#C4A882] focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30 transition-all"
+                                placeholder="Who wrote this manuscript?">
+                            @error('penulis') <span class="text-red-500 text-xs font-serif">{{ $message }}</span> @enderror
+                        </div>
+
+                        {{-- Stock Input --}}
+                        <div>
+                            <label class="block text-sm font-serif font-bold text-[#2D1B4E] mb-1">
+                                📦 Stock <span class="text-red-500">*</span>
+                            </label>
+                            <input type="number" wire:model="stok"
+                                class="w-full px-4 py-2.5 bg-white border-2 border-[#D4AF37]/20 rounded-lg font-serif text-[#2D1B4E] placeholder-[#C4A882] focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30 transition-all"
+                                placeholder="How many copies?"
+                                min="0">
+                            @error('stok') <span class="text-red-500 text-xs font-serif">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    {{-- Buttons --}}
+                    <div class="flex justify-end gap-3 pt-4 border-t-2 border-[#D4AF37]/10">
+                        <button type="button" wire:click="closeModal"
+                            class="px-6 py-2.5 text-sm font-serif text-[#5C4B3A] bg-[#E8E0D0] border-2 border-[#D4AF37]/20 rounded-lg hover:bg-[#D4AF37]/10 transition-all">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="px-6 py-2.5 text-sm font-serif font-bold text-[#2D1B4E] bg-gradient-to-r from-[#D4AF37] to-[#B4941E] rounded-lg hover:shadow-lg hover:shadow-[#D4AF37]/30 transform hover:-translate-y-0.5 transition-all">
+                            {{ $isEdit ? 'Update Manuscript' : 'Add to Library' }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     @endif
 
-    {{-- ================================================================
-         SECTION 7: MODAL KONFIRMASI HAPUS
-         - Centered dengan icon warning
-         - Tombol cancel & delete
-    ================================================================ --}}
+    {{-- DELETE CONFIRMATION MODAL --}}
     @if($showDeleteModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="flex min-h-screen items-center justify-center p-4">
-                <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" wire:click="$set('showDeleteModal', false)"></div>
-                
-                <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6 text-center">
-                    {{-- Warning Icon --}}
-                    <div class="mx-auto w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+        <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 backdrop-blur-sm p-4">
+            <div class="bg-gradient-to-br from-[#FAF8F5] to-[#F0EAE0] p-8 rounded-lg border-2 border-red-300 shadow-2xl max-w-md w-full transform transition-all">
+
+                <div class="text-center">
+                    <div class="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
                         </svg>
                     </div>
 
-                    {{-- Text --}}
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Hapus Buku</h3>
-                    <p class="text-sm text-gray-500 mb-6">
-                        Apakah Anda yakin ingin menghapus buku ini? Tindakan ini tidak dapat dibatalkan.
+                    <h3 class="text-xl font-serif font-bold text-[#2D1B4E] mb-2">Burn This Manuscript?</h3>
+                    <p class="text-[#5C4B3A] font-serif italic mb-6">
+                        This action cannot be undone. The knowledge will be lost forever from the Library of Alexandria.
                     </p>
 
-                    {{-- Buttons --}}
-                    <div class="flex gap-3">
-                        <button type="button" wire:click="$set('showDeleteModal', false)"
-                            class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 
-                                   rounded-lg hover:bg-gray-50 transition-colors">
-                            Batal
+                    <div class="flex justify-center gap-3">
+                        <button wire:click="$set('showDeleteModal', false)"
+                            class="px-6 py-2.5 text-sm font-serif text-[#5C4B3A] bg-[#E8E0D0] border-2 border-[#D4AF37]/20 rounded-lg hover:bg-[#D4AF37]/10 transition-all">
+                            Preserve It
                         </button>
-                        <button type="button" wire:click="deleteBook"
-                            class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 
-                                   rounded-lg hover:bg-red-700 transition-colors">
-                            Ya, Hapus
+                        <button wire:click="deleteBook"
+                            class="px-6 py-2.5 text-sm font-serif font-bold text-white bg-gradient-to-r from-red-600 to-red-700 rounded-lg hover:shadow-lg hover:shadow-red-500/30 transform hover:-translate-y-0.5 transition-all">
+                            Burn Manuscript
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     @endif
+
 </div>
 
-{{--
-=============================================================================
-CATATAN PENGEMBANGAN
-=============================================================================
 
-1. INTEGRASI LIVEWIRE (Sudah Siap):
-   - wire:model sudah diterapkan pada semua input
-   - wire:click sudah ada pada semua tombol aksi
-   - wire:submit pada form modal
-   - Tinggal pastikan Livewire component sudah ada
-
-2. INTEGRASI YAJRA DATATABLES:
-   - Ganti section tabel dengan:
-     {!! $dataTable->table(['class' => 'w-full']) !!}
-   - Tambahkan di bagian bawah:
-     @push('scripts')
-         {!! $dataTable->scripts() !!}
-     @endpush
-
-3. PAGINATION:
-   - Sudah menggunakan {{ $books->links() }}
-   - Untuk kustomisasi, publish pagination views:
-     php artisan vendor:publish --tag=laravel-pagination
-
-4. RESPONSIVE BREAKPOINTS:
-   - Mobile: < 640px (sm)
-   - Tablet: 640px - 1024px (md)
-   - Desktop: > 1024px (lg)
-
-5. WARNA UTAMA:
-   - Primary: Purple (purple-600)
-   - Success: Green (green-600)
-   - Danger: Red (red-600)
-   - Info: Blue (blue-600)
-=============================================================================
---}}

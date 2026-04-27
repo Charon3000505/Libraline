@@ -18,6 +18,7 @@ class Book extends Model
         'stok',
         'kategori',
         'deskripsi',
+        'image',
     ];
 
     /**

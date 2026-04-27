@@ -1,109 +1,337 @@
-<div>
-    {{-- Header Dashboard --}}
-    <div class="mb-6 sm:mb-8">
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Dashboard</h2>
-        <p class="text-gray-600 mt-1 text-sm sm:text-base">Selamat datang kembali, {{ auth()->user()->name }}!</p>
-    </div>
-    
-    {{-- Statistik Peminjaman - Responsive Grid --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-        {{-- Buku Dipinjam --}}
-        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg overflow-hidden">
-            <div class="p-4 sm:p-6 text-white">
-                <div class="flex items-center justify-between">
+<div class="min-h-screen bg-[#F5F0E8] bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M30 5 L55 30 L30 55 L5 30 Z" fill="none" stroke="%23D4AF37" stroke-width="0.5" opacity="0.05"/%3E%3C/svg%3E')]">
+    <!-- Header dengan Ornamen Yunani -->
+    <div class="relative bg-gradient-to-b from-[#2D1B4E] via-[#3D2B5E] to-[#4A3568] border-b-4 border-[#D4AF37] shadow-2xl">
+        <!-- Pola Meander Yunani -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width="40" height="40" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 20 L10 20 L10 10 L20 10 L20 20 L30 20 L30 10 L40 10 L40 20 L40 30 L30 30 L30 20 L20 20 L20 30 L10 30 L10 20 L0 20 Z" fill="%23D4AF37" opacity="0.3"/%3E%3C/svg%3E')]"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <!-- Kolom Ikonik -->
+                    <div class="hidden sm:block text-[#D4AF37] text-4xl opacity-80">🏛️</div>
                     <div>
-                        <p class="text-indigo-100 text-xs sm:text-sm font-medium">Buku Sedang Dipinjam</p>
-                        <p class="text-3xl sm:text-4xl font-bold mt-1 sm:mt-2">{{ $bukuDipinjam }}</p>
-                        <p class="text-indigo-200 text-xs sm:text-sm mt-1 sm:mt-2">dari maksimal 5 buku</p>
+                        <h1 class="text-4xl font-serif font-bold text-[#D4AF37] tracking-wide" style="font-family: 'Georgia', 'Times New Roman', serif;">
+                            Bibliotheca Alexandrina
+                        </h1>
+                        <p class="text-[#C4A882] text-sm mt-1 font-serif italic">~ Rumah Para Pencari Kebijaksanaan ~</p>
                     </div>
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-white bg-opacity-20 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                    </div>
+                </div>
+
+                <!-- Hiasan Karangan Bunga Laurel -->
+                <div class="hidden lg:flex items-center space-x-2 text-[#D4AF37] opacity-60">
+                    <span>🌿</span>
+                    <span class="text-2xl">⚜️</span>
+                    <span>🌿</span>
                 </div>
             </div>
         </div>
-        
-        {{-- Aksi Cepat --}}
-        <div class="bg-white rounded-xl shadow-md p-4 sm:p-6">
-            <h3 class="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">Aksi Cepat</h3>
-            <div class="space-y-2 sm:space-y-3">
-                <a href="{{ route('books') }}" class="flex items-center p-2.5 sm:p-3 bg-gray-50 rounded-lg hover:bg-indigo-50 transition-colors">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Royal Info Panel - Statistik -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Active Loans Card -->
+            <div class="group relative bg-gradient-to-br from-[#FAF8F5] to-[#F0EAE0] rounded-lg shadow-lg border-2 border-[#D4AF37]/30 hover:border-[#D4AF37]/60 transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/20">
+                <!-- Ornamen Sudut -->
+                <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#D4AF37]/40 rounded-tl-lg"></div>
+                <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#D4AF37]/40 rounded-tr-lg"></div>
+                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#D4AF37]/40 rounded-bl-lg"></div>
+                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#D4AF37]/40 rounded-br-lg"></div>
+
+                <div class="relative p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 bg-gradient-to-br from-[#2D1B4E] to-[#4A3568] rounded-lg shadow-md group-hover:shadow-[#D4AF37]/30 transition-all duration-300">
+                            <svg class="w-8 h-8 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+                            </svg>
+                        </div>
+                        <div class="text-[#D4AF37] opacity-40 text-3xl font-serif">I</div>
                     </div>
-                    <span class="ml-3 text-gray-700 font-medium text-sm sm:text-base">Cari Buku</span>
-                </a>
-                <a href="{{ route('loans') }}" class="flex items-center p-2.5 sm:p-3 bg-gray-50 rounded-lg hover:bg-green-50 transition-colors">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
+                    <h3 class="text-sm font-serif text-[#5C4B3A] uppercase tracking-wider mb-2">Active Loans</h3>
+                    <p class="text-4xl font-bold text-[#2D1B4E] font-serif">{{ $activeLoans ?? 0 }}</p>
+                    <div class="mt-3 h-0.5 bg-gradient-to-r from-[#D4AF37] to-transparent w-1/2 group-hover:w-full transition-all duration-500"></div>
+                </div>
+            </div>
+
+            <!-- Total Books Card -->
+            <div class="group relative bg-gradient-to-br from-[#FAF8F5] to-[#F0EAE0] rounded-lg shadow-lg border-2 border-[#D4AF37]/30 hover:border-[#D4AF37]/60 transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/20">
+                <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#D4AF37]/40 rounded-tl-lg"></div>
+                <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#D4AF37]/40 rounded-tr-lg"></div>
+                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#D4AF37]/40 rounded-bl-lg"></div>
+                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#D4AF37]/40 rounded-br-lg"></div>
+
+                <div class="relative p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 bg-gradient-to-br from-[#2D1B4E] to-[#4A3568] rounded-lg shadow-md group-hover:shadow-[#D4AF37]/30 transition-all duration-300">
+                            <svg class="w-8 h-8 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+                            </svg>
+                        </div>
+                        <div class="text-[#D4AF37] opacity-40 text-3xl font-serif">II</div>
                     </div>
-                    <span class="ml-3 text-gray-700 font-medium text-sm sm:text-base">Riwayat Peminjaman</span>
-                </a>
+                    <h3 class="text-sm font-serif text-[#5C4B3A] uppercase tracking-wider mb-2">Total Collection</h3>
+                    <p class="text-4xl font-bold text-[#2D1B4E] font-serif">{{ $totalBooks ?? 0 }}</p>
+                    <div class="mt-3 h-0.5 bg-gradient-to-r from-[#D4AF37] to-transparent w-1/2 group-hover:w-full transition-all duration-500"></div>
+                </div>
+            </div>
+
+            <!-- Loan History Card -->
+            <div class="group relative bg-gradient-to-br from-[#FAF8F5] to-[#F0EAE0] rounded-lg shadow-lg border-2 border-[#D4AF37]/30 hover:border-[#D4AF37]/60 transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/20">
+                <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#D4AF37]/40 rounded-tl-lg"></div>
+                <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#D4AF37]/40 rounded-tr-lg"></div>
+                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#D4AF37]/40 rounded-bl-lg"></div>
+                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#D4AF37]/40 rounded-br-lg"></div>
+
+                <div class="relative p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 bg-gradient-to-br from-[#2D1B4E] to-[#4A3568] rounded-lg shadow-md group-hover:shadow-[#D4AF37]/30 transition-all duration-300">
+                            <svg class="w-8 h-8 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm1 2a1 1 0 000 2h10a1 1 0 100-2H5zm0 4a1 1 0 100 2h10a1 1 0 100-2H5zm0 4a1 1 0 100 2h6a1 1 0 100-2H5z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="text-[#D4AF37] opacity-40 text-3xl font-serif">III</div>
+                    </div>
+                    <h3 class="text-sm font-serif text-[#5C4B3A] uppercase tracking-wider mb-2">Loan History</h3>
+                    <p class="text-4xl font-bold text-[#2D1B4E] font-serif">{{ $loanHistory ?? 0 }}</p>
+                    <div class="mt-3 h-0.5 bg-gradient-to-r from-[#D4AF37] to-transparent w-1/2 group-hover:w-full transition-all duration-500"></div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    {{-- Riwayat Peminjaman --}}
-    <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
-            <h3 class="text-base sm:text-lg font-semibold text-gray-800">Riwayat Peminjaman Terbaru</h3>
+
+        <!-- Divider Ornamen Yunani -->
+        <div class="flex items-center justify-center my-8">
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"></div>
+            <div class="px-4 text-[#D4AF37] text-2xl">⚜️</div>
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"></div>
         </div>
-        
-        @if(count($riwayatPeminjaman) > 0)
-            {{-- Mobile: Card view --}}
-            <div class="block sm:hidden divide-y divide-gray-200">
-                @foreach($riwayatPeminjaman as $pinjam)
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <div class="min-w-0 flex-1">
-                                <p class="font-medium text-gray-900 truncate">{{ $pinjam['judul_buku'] }}</p>
-                                <p class="text-sm text-gray-500 mt-1">{{ $pinjam['tanggal_pinjam'] }}</p>
-                            </div>
-                            <span class="ml-2 px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0
-                                {{ $pinjam['status'] === 'dipinjam' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
-                                {{ ucfirst($pinjam['status']) }}
-                            </span>
+
+        <!-- Menu Kerajaan - Aksi Cepat -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-serif font-bold text-[#2D1B4E] mb-6 flex items-center">
+                <span class="text-[#D4AF37] mr-3 text-3xl">❦</span>
+                Royal Actions
+                <span class="text-[#D4AF37] ml-3 text-3xl">❦</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Browse Books -->
+                <a href="{{ route('books') }}"
+                   class="group relative bg-gradient-to-r from-[#2D1B4E] to-[#4A3568] rounded-lg p-6 border-2 border-[#D4AF37]/40 hover:border-[#D4AF37] transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/30 transform hover:-translate-y-1">
+                    <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width="20" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="10" cy="10" r="1" fill="%23D4AF37"/%3E%3C/svg%3E')]"></div>
+                    <div class="relative flex items-center space-x-4">
+                        <div class="p-3 bg-[#D4AF37]/20 rounded-full group-hover:bg-[#D4AF37]/30 transition-all duration-300">
+                            <svg class="w-6 h-6 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-[#D4AF37] font-serif font-bold text-lg">Browse Collection</h3>
+                            <p class="text-[#C4A882] text-sm font-serif italic">Explore ancient manuscripts</p>
                         </div>
                     </div>
-                @endforeach
+                </a>
+
+                <!-- Active Loans -->
+                <a href="{{ route('loans') }}"
+                   class="group relative bg-gradient-to-r from-[#2D1B4E] to-[#4A3568] rounded-lg p-6 border-2 border-[#D4AF37]/40 hover:border-[#D4AF37] transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/30 transform hover:-translate-y-1">
+                    <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width="20" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="10" cy="10" r="1" fill="%23D4AF37"/%3E%3C/svg%3E')]"></div>
+                    <div class="relative flex items-center space-x-4">
+                        <div class="p-3 bg-[#D4AF37]/20 rounded-full group-hover:bg-[#D4AF37]/30 transition-all duration-300">
+                            <svg class="w-6 h-6 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-[#D4AF37] font-serif font-bold text-lg">Manage Loans</h3>
+                            <p class="text-[#C4A882] text-sm font-serif italic">View active borrowings</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Returns -->
+                <a href="{{ route('returns') }}"
+                   class="group relative bg-gradient-to-r from-[#2D1B4E] to-[#4A3568] rounded-lg p-6 border-2 border-[#D4AF37]/40 hover:border-[#D4AF37] transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/30 transform hover:-translate-y-1">
+                    <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width="20" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="10" cy="10" r="1" fill="%23D4AF37"/%3E%3C/svg%3E')]"></div>
+                    <div class="relative flex items-center space-x-4">
+                        <div class="p-3 bg-[#D4AF37]/20 rounded-full group-hover:bg-[#D4AF37]/30 transition-all duration-300">
+                            <svg class="w-6 h-6 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-[#D4AF37] font-serif font-bold text-lg">Return Books</h3>
+                            <p class="text-[#C4A882] text-sm font-serif italic">Process book returns</p>
+                        </div>
+                    </div>
+                </a>
             </div>
-            
-            {{-- Desktop: Table view --}}
-            <div class="hidden sm:block overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Judul Buku</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal Pinjam</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach($riwayatPeminjaman as $pinjam)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $pinjam['judul_buku'] }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $pinjam['tanggal_pinjam'] }}</td>
+        </div>
+
+        <!-- Divider Ornamen Yunani -->
+        <div class="flex items-center justify-center my-8">
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"></div>
+            <div class="px-4 text-[#2D1B4E] text-xl font-serif">📜</div>
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"></div>
+        </div>
+
+        <!-- Table seperti Scroll Kuno -->
+        @if(isset($activeLoansList) && count($activeLoansList) > 0)
+        <div class="mb-8">
+            <h2 class="text-2xl font-serif font-bold text-[#2D1B4E] mb-6 flex items-center">
+                <span class="text-[#D4AF37] mr-3">📜</span>
+                Active Borrowings
+            </h2>
+
+            <div class="bg-gradient-to-br from-[#FAF8F5] to-[#F0EAE0] rounded-lg shadow-xl border-2 border-[#D4AF37]/30 overflow-hidden">
+                <!-- Header ala Scroll -->
+                <div class="bg-gradient-to-r from-[#2D1B4E] via-[#3D2B5E] to-[#4A3568] px-6 py-4 border-b-2 border-[#D4AF37]">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[#D4AF37] text-lg">📜</span>
+                            <h3 class="text-lg font-serif font-bold text-[#D4AF37]">Loan Records</h3>
+                        </div>
+                        <div class="text-[#C4A882] text-sm font-serif italic">{{ count($activeLoansList) }} Active</div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-[#D4AF37]/20">
+                        <thead class="bg-[#E8E0D0]/50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider border-b border-[#D4AF37]/20">Book</th>
+                                <th class="px-6 py-4 text-left text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider border-b border-[#D4AF37]/20">Borrower</th>
+                                <th class="px-6 py-4 text-left text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider border-b border-[#D4AF37]/20">Borrow Date</th>
+                                <th class="px-6 py-4 text-left text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider border-b border-[#D4AF37]/20">Due Date</th>
+                                <th class="px-6 py-4 text-left text-xs font-serif font-bold text-[#5C4B3A] uppercase tracking-wider border-b border-[#D4AF37]/20">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#D4AF37]/10">
+                            @foreach($activeLoansList as $loan)
+                            <tr class="hover:bg-[#D4AF37]/5 transition-all duration-300 cursor-pointer group">
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        {{ $pinjam['status'] === 'dipinjam' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
-                                        {{ ucfirst($pinjam['status']) }}
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10 bg-gradient-to-br from-[#D4AF37] to-[#B4941E] rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg transition-all">
+                                            <span class="text-[#2D1B4E] font-serif font-bold text-sm">📖</span>
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-serif font-bold text-[#2D1B4E] group-hover:text-[#D4AF37] transition-colors">
+                                                {{ $loan->book->judul ?? 'Unknown Book' }}
+                                            </div>
+                                            <div class="text-xs text-[#5C4B3A] font-serif italic">
+                                                {{ $loan->book->penulis ?? 'Anonymous' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-serif text-[#2D1B4E]">{{ $loan->user->name ?? 'Unknown User' }}</div>
+                                    <div class="text-xs text-[#5C4B3A] font-serif italic">{{ $loan->user->email ?? '' }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-serif text-[#2D1B4E]">
+                                        {{ isset($loan->tanggal_pinjam) ? \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('d M Y') : '-' }}
+                                    </div>
+                                    <div class="text-xs text-[#5C4B3A] font-serif italic">
+                                        {{ isset($loan->tanggal_pinjam) ? \Carbon\Carbon::parse($loan->tanggal_pinjam)->diffForHumans() : '' }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-serif text-[#2D1B4E]">
+                                        {{ isset($loan->tanggal_kembali) ? \Carbon\Carbon::parse($loan->tanggal_kembali)->format('d M Y') : '-' }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @php
+                                        $status = $loan->status ?? 'active';
+                                        $statusColors = [
+                                            'active' => 'bg-[#D4AF37]/20 text-[#2D1B4E] border-[#D4AF37]/40',
+                                            'returned' => 'bg-green-100 text-green-800 border-green-300',
+                                            'overdue' => 'bg-red-100 text-red-800 border-red-300'
+                                        ];
+                                        $statusLabels = [
+                                            'active' => 'Active',
+                                            'returned' => 'Returned',
+                                            'overdue' => 'Overdue'
+                                        ];
+                                    @endphp
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-serif font-semibold rounded-full border {{ $statusColors[$status] ?? $statusColors['active'] }}">
+                                        {{ $statusLabels[$status] ?? ucfirst($status) }}
                                     </span>
                                 </td>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        @else
-            <div class="text-center py-6 sm:py-8 text-gray-500">
-                <p class="text-sm sm:text-base">Belum ada riwayat peminjaman.</p>
+        </div>
+        @endif
+
+        <!-- Empty State Artistik -->
+        @if(!isset($activeLoansList) || count($activeLoansList) == 0)
+        <div class="text-center py-16">
+            <div class="relative inline-block">
+                <div class="text-8xl mb-8 opacity-30 transform hover:scale-110 transition-transform">📜</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#F5F0E8] via-transparent to-transparent"></div>
             </div>
+
+            <h3 class="text-3xl font-serif font-bold text-[#2D1B4E] mb-4">
+                The Library Awaits
+            </h3>
+
+            <p class="text-lg text-[#5C4B3A] font-serif italic mb-6 max-w-2xl mx-auto">
+                "A library is a temple of wisdom, where seekers of knowledge gather to enlighten their minds."
+            </p>
+
+            <div class="flex items-center justify-center space-x-2 text-[#D4AF37] mb-8">
+                <span>✦</span>
+                <span class="text-2xl">⚜️</span>
+                <span>✦</span>
+            </div>
+
+            <a href="{{ route('books') }}"
+               class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-[#2D1B4E] to-[#4A3568] text-[#D4AF37] font-serif font-bold rounded-lg border-2 border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#2D1B4E] transition-all duration-500 shadow-lg hover:shadow-2xl hover:shadow-[#D4AF37]/30 transform hover:-translate-y-1">
+                <span class="mr-2 text-xl">📚</span>
+                Explore the Collection
+                <span class="ml-2 text-xl">✨</span>
+            </a>
+
+            <!-- Dekorasi Bawah -->
+            <div class="mt-12 flex justify-center space-x-4 opacity-20">
+                <div class="w-24 h-24 border-2 border-[#D4AF37] rounded-full flex items-center justify-center">
+                    <span class="text-2xl">🏛️</span>
+                </div>
+                <div class="w-24 h-24 border-2 border-[#D4AF37] rounded-full flex items-center justify-center">
+                    <span class="text-2xl">📖</span>
+                </div>
+                <div class="w-24 h-24 border-2 border-[#D4AF37] rounded-full flex items-center justify-center">
+                    <span class="text-2xl">🕯️</span>
+                </div>
+            </div>
+        </div>
         @endif
     </div>
+
+    <!-- Footer dengan Motif Yunani -->
+    <div class="mt-16 bg-gradient-to-r from-[#2D1B4E] via-[#3D2B5E] to-[#2D1B4E] border-t-2 border-[#D4AF37]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <span class="text-[#D4AF37] text-2xl">⚜️</span>
+                    <p class="text-[#C4A882] font-serif italic text-sm">
+                        Bibliotheca Alexandrina - Eternal Legacy of Knowledge
+                    </p>
+                </div>
+                <div class="flex items-center space-x-2 text-[#D4AF37]/40">
+                    <span>🌿</span>
+                    <span>🏛️</span>
+                    <span>📜</span>
+                    <span>🌿</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+

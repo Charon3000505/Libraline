@@ -4,21 +4,22 @@ namespace App\Livewire\Books;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use App\Models\Book;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     // Search & Filter
     public string $search = '';
     public string $kategori = '';
-    
+
     // Form data
     public bool $showModal = false;
     public bool $isEdit = false;
     public ?int $bookId = null;
-    
+
     public string $judul = '';
     public string $penulis = '';
     public string $penerbit = '';
@@ -27,6 +28,7 @@ class Index extends Component
     public int $stok = 1;
     public string $kategoriInput = '';
     public string $deskripsi = '';
+    public $image; // 👈 TAMBAHAN
 
     // Konfirmasi hapus
     public bool $showDeleteModal = false;
@@ -45,6 +47,7 @@ class Index extends Component
             'stok' => 'required|integer|min:0',
             'kategoriInput' => 'nullable|max:100',
             'deskripsi' => 'nullable|max:1000',
+            'image' => 'nullable|image|max:2048', // 👈 TAMBAHAN
         ];
     }
 
@@ -72,7 +75,7 @@ class Index extends Component
         $this->stok = $book->stok;
         $this->kategoriInput = $book->kategori ?? '';
         $this->deskripsi = $book->deskripsi ?? '';
-        
+
         $this->showModal = true;
         $this->isEdit = true;
     }
@@ -80,6 +83,12 @@ class Index extends Component
     public function save()
     {
         $this->validate();
+
+        $imagePath = null;
+
+        if ($this->image) {
+            $imagePath = $this->image->store('books', 'public');
+        }
 
         $data = [
             'judul' => $this->judul,
@@ -90,9 +99,16 @@ class Index extends Component
             'stok' => $this->stok,
             'kategori' => $this->kategoriInput ?: null,
             'deskripsi' => $this->deskripsi ?: null,
+            'image' => $imagePath,
         ];
 
         if ($this->isEdit && $this->bookId) {
+
+            // kalau edit tapi ga upload gambar baru → jangan hapus gambar lama
+            if (!$this->image) {
+                unset($data['image']);
+            }
+
             Book::find($this->bookId)->update($data);
             session()->flash('message', 'Buku berhasil diperbarui!');
         } else {
@@ -119,6 +135,29 @@ class Index extends Component
         $this->deleteId = null;
     }
 
+
+    public function pinjamBuku($id)
+    {
+        $book = Book::findOrFail($id);
+
+        if ($book->stok <= 0) {
+            session()->flash('message', 'Buku habis!');
+            return;
+        }
+
+        $book->decrement('stok');
+
+        \App\Models\Loan::create([
+            'user_id' => auth()->id(),
+            'book_id' => $book->id,
+            'tanggal_pinjam' => now(),
+            'tanggal_kembali' => now()->addDays(7), // 🔥 WAJIB ADA
+            'status' => 'dipinjam',
+        ]);
+
+        session()->flash('message', 'Buku berhasil dipinjam!');
+    }
+
     public function closeModal()
     {
         $this->showModal = false;
@@ -136,6 +175,7 @@ class Index extends Component
         $this->stok = 1;
         $this->kategoriInput = '';
         $this->deskripsi = '';
+        $this->image = null; // 👈 TAMBAHAN
         $this->isEdit = false;
     }
 

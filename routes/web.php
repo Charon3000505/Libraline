@@ -10,17 +10,17 @@ use App\Livewire\Returns\Index as ReturnsIndex;
 
 // Route halaman utama - redirect langsung ke login
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('welcome'); // 🔥 langsung ke landing page
 })->name('home');
 
 // Dashboard - menggunakan Livewire component berdasarkan role
 Route::get('/dashboard', function () {
     $role = auth()->user()->role ?? 'user';
-    
+
     if ($role === 'admin') {
         return app(AdminDashboard::class)();
     }
-    
+
     return app(UserDashboard::class)();
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -30,16 +30,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     // Data Buku - Livewire Component
     Route::get('/books', BooksIndex::class)->name('books');
-    
+
     // Peminjaman - Livewire Component
     Route::get('/loans', LoansIndex::class)->name('loans');
-    
+
     // Pengembalian - Livewire Component
     Route::get('/returns', ReturnsIndex::class)->name('returns');
-    
+
     // Kelola User (khusus admin)
     Route::get('/users', function () {
         if (auth()->user()->role !== 'admin') {
